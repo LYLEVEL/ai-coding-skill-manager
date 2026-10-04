@@ -1,0 +1,32 @@
+{
+  "test-demo-verify-skill": {
+    "summary": "测试验证技能：用于验证自动化生命周期管理",
+    "category": "自动化测试",
+    "tags": [
+      "测试",
+      "CI"
+    ]
+  },
+  "test-tmp": {
+    "summary": "zh",
+    "category": "实用工具",
+    "tags": [
+      "自定义"
+    ]
+  },
+  "brainstorming": {
+    "summary": "【自定义】头脑风暴与需求探索专用技能",
+    "category": "需求与规划",
+    "tags": [
+      "头脑风暴",
+      "自定义测试"
+    ]
+  },
+  "demo-editor-test": {
+    "summary": "编辑器测试技能",
+    "category": "测试",
+    "tags": [
+      "自定义"
+    ]
+  }
+}

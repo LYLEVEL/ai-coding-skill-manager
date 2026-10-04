@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Coding Skill Manager | 统一技能管理器</title>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS (本地离线包) -->
+  <script src="/static/vendor/tailwind.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Vue 3 (本地离线包) -->
+  <script src="/static/vendor/vue.global.prod.js"></script>
+  <!-- Lucide Icons (本地离线包) -->
+  <script src="/static/vendor/lucide.min.js"></script>
+  <!-- Marked.js (本地离线包) -->
+  <script src="/static/vendor/marked.min.js"></script>
+  <style>
+    [v-cloak] { display: none; }
+    
+    /* 清新自定义滚动条 */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
+    /* 清新背景光晕网格 */
+    body {
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(209, 250, 229, 0.45) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(224, 242, 254, 0.45) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(241, 245, 249, 0.8) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Markdown 正文优雅排版 */
+    .prose { color: #334155; }
+    .prose h1, .prose h2, .prose h3, .prose h4 { color: #0f172a; font-weight: 700; }
+    .prose a { color: #059669; text-decoration: underline; text-underline-offset: 3px; }
+    .prose strong { color: #0f172a; font-weight: 600; }
+    .prose code { background: #e2e8f0; color: #0f172a; padding: 0.15rem 0.35rem; border-radius: 0.35rem; font-size: 0.82rem; font-family: ui-monospace, monospace; }
+    .prose pre { background: #0f172a; color: #f8fafc; padding: 1rem 1.25rem; border-radius: 0.85rem; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 0.8rem 0; }
+    .prose pre code { background: transparent; color: #38bdf8; padding: 0; font-size: 0.85rem; }
+    .prose ul, .prose ol { padding-left: 1.25rem; margin: 0.6rem 0; }
+    .prose li { margin: 0.25rem 0; }
+    .prose blockquote { border-left: 3px solid #10b981; padding-left: 0.85rem; color: #64748b; font-style: italic; background: rgba(240, 253, 244, 0.5); padding-top: 0.25rem; padding-bottom: 0.25rem; border-radius: 0 0.5rem 0.5rem 0; }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
+  <div id="app" v-cloak class="flex-1 flex flex-col">
+    
+    <!-- 顶部导航栏 (清爽透亮毛玻璃，自适应防挤压) -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3 shadow-xs overflow-x-auto select-none">
+      <!-- 左侧：品牌 Logo 与标题 -->
+      <div class="flex items-center space-x-3 shrink-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-sky-400 flex items-center justify-center shadow-md shadow-emerald-500/20 text-white shrink-0">
+          <i data-lucide="sparkles" class="w-4.5 h-4.5"></i>
+        </div>
+        <div class="shrink-0">
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 whitespace-nowrap">AI Coding Skill Manager</h1>
+            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs whitespace-nowrap">全生态</span>
+          </div>
+          <p class="hidden sm:block text-[11px] text-slate-400 whitespace-nowrap">Antigravity · Claude Code · Codex 统一技能中枢</p>
+        </div>
+      </div>
+
+      <!-- 中间：顶栏平台生态分段切换器 (Antigravity / Claude Code / Codex) -->
+      <nav class="flex items-center p-1 bg-slate-100/90 rounded-2xl border border-slate-200/80 shadow-inner shrink-0">
+        <!-- 全部生态 -->
+        <button 
+          @click="selectPlatform('all')" 
+          :class="selectedPlatform === 'all' ? 'bg-white text-slate-900 shadow-xs font-bold' : 'text-slate-500 hover:text-slate-800 font-medium'"
+          class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <i data-lucide="layers" class="w-3.5 h-3.5 shrink-0"></i>
+          <span class="whitespace-nowrap">全部生态</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0" :class="selectedPlatform === 'all' ? 'bg-slate-100 text-slate-700' : 'bg-slate-200/80 text-slate-500'">{{ skills.length }}</span>
+        </button>
+
+        <!-- Antigravity -->
+        <button 
+          @click="selectPlatform('antigravity')" 
+          :class="selectedPlatform === 'antigravity' ? 'bg-white text-emerald-800 shadow-xs font-bold' : 'text-slate-500 hover:text-emerald-700 font-medium'"
+          class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-xs shadow-emerald-500/50 shrink-0"></span>
+          <span class="whitespace-nowrap">Antigravity</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0" :class="selectedPlatform === 'antigravity' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' : 'bg-slate-200/80 text-slate-500'">{{ platformCounts.antigravity || 0 }}</span>
+        </button>
+
+        <!-- Claude Code -->
+        <button 
+          @click="selectPlatform('claude')" 
+          :class="selectedPlatform === 'claude' ? 'bg-white text-amber-800 shadow-xs font-bold' : 'text-slate-500 hover:text-amber-700 font-medium'"
+          class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <span class="w-2 h-2 rounded-full bg-amber-500 shadow-xs shadow-amber-500/50 shrink-0"></span>
+          <span class="whitespace-nowrap">Claude Code</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0" :class="selectedPlatform === 'claude' ? 'bg-amber-50 text-amber-700 border border-amber-200/60' : 'bg-slate-200/80 text-slate-500'">{{ platformCounts.claude || 0 }}</span>
+        </button>
+
+        <!-- Codex -->
+        <button 
+          @click="selectPlatform('codex')" 
+          :class="selectedPlatform === 'codex' ? 'bg-white text-indigo-800 shadow-xs font-bold' : 'text-slate-500 hover:text-indigo-700 font-medium'"
+          class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <span class="w-2 h-2 rounded-full bg-indigo-500 shadow-xs shadow-indigo-500/50 shrink-0"></span>
+          <span class="whitespace-nowrap">Codex</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold shrink-0" :class="selectedPlatform === 'codex' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/60' : 'bg-slate-200/80 text-slate-500'">{{ platformCounts.codex || 0 }}</span>
+        </button>
+      </nav>
+
+      <!-- 右侧：功能控制按钮组 -->
+      <div class="flex items-center space-x-2 shrink-0">
+        <!-- 重新扫描 -->
+        <button @click="triggerScan" :disabled="scanning" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 transition shadow-2xs disabled:opacity-50 cursor-pointer whitespace-nowrap shrink-0">
+          <i data-lucide="refresh-cw" :class="{'animate-spin text-emerald-600': scanning}" class="w-3.5 h-3.5 text-slate-500 shrink-0"></i>
+          <span class="whitespace-nowrap">{{ scanning ? '扫描中...' : '重新扫描' }}</span>
+        </button>
+
+        <!-- 安全回收站 -->
+        <button @click="showTrashModal = true" class="relative flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white hover:bg-amber-50/40 text-slate-700 border border-slate-200 hover:border-amber-200 transition shadow-2xs cursor-pointer whitespace-nowrap shrink-0">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+          <span class="whitespace-nowrap">回收站</span>
+          <span v-if="trashCount > 0" class="ml-0.5 px-1.5 py-0.2 bg-amber-500 text-white text-[10px] font-bold rounded-full shadow-xs shrink-0">{{ trashCount }}</span>
+        </button>
+
+        <!-- 添加新技能 -->
+        <button @click="openCreateModal" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white shadow-md shadow-emerald-500/20 transition cursor-pointer whitespace-nowrap shrink-0">
+          <i data-lucide="plus" class="w-3.5 h-3.5 shrink-0"></i>
+          <span class="whitespace-nowrap">添加新 Skill</span>
+        </button>
+
+        <!-- 退出程序 -->
+        <button @click="exitApp" title="关闭管理器后台服务" class="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 transition cursor-pointer whitespace-nowrap shrink-0">
+          <i data-lucide="power" class="w-3.5 h-3.5 text-slate-400 hover:text-rose-500 shrink-0"></i>
+          <span class="whitespace-nowrap">退出</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+
+      <!-- 核心指标卡片 (清新透亮 4 列 - 随选中生态动态响应) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- 总技能数 -->
+        <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 flex items-center justify-between shadow-xs hover:shadow-md hover:border-sky-300/80 transition group">
+          <div class="space-y-1">
+            <span class="text-xs font-semibold text-slate-400">{{ selectedPlatform === 'all' ? '全生态技能总数' : getPlatformLabel(selectedPlatform) + ' 技能数' }}</span>
+            <div class="text-2xl font-black text-slate-900 flex items-baseline space-x-1.5">
+              <span>{{ activeOverview.total_skills }}</span>
+              <span class="text-xs text-sky-600 font-medium">个模块</span>
+            </div>
+            <div class="text-[11px] text-slate-400">内置 {{ activeOverview.type_counts?.builtin || 0 }} · 全局 {{ activeOverview.type_counts?.global || 0 }} · 扩展 {{ (activeOverview.type_counts?.plugin || 0) + (activeOverview.type_counts?.vendor || 0) }}</div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 group-hover:scale-105 transition-transform">
+            <i data-lucide="layers" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <!-- 运行激活状态 -->
+        <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 flex items-center justify-between shadow-xs hover:shadow-md hover:border-emerald-300/80 transition group">
+          <div class="space-y-1">
+            <span class="text-xs font-semibold text-slate-400">运行激活状态</span>
+            <div class="text-2xl font-black text-slate-900 flex items-baseline space-x-1.5">
+              <span class="text-emerald-600">{{ activeOverview.enabled_count }}</span>
+              <span class="text-xs text-slate-400 font-normal">/ 禁用 {{ activeOverview.disabled_count }}</span>
+            </div>
+            <div class="text-[11px] text-emerald-600/80 font-medium">激活就绪率 {{ Math.round((activeOverview.enabled_count / (activeOverview.total_skills || 1)) * 100) }}%</div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-105 transition-transform">
+            <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <!-- 遥测总调用次数 -->
+        <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 flex items-center justify-between shadow-xs hover:shadow-md hover:border-indigo-300/80 transition group">
+          <div class="space-y-1">
+            <span class="text-xs font-semibold text-slate-400">调用与触发频次</span>
+            <div class="text-2xl font-black text-indigo-600 flex items-baseline space-x-1.5">
+              <span>{{ activeOverview.total_calls }}</span>
+              <span class="text-xs text-slate-400 font-normal">次触发</span>
+            </div>
+            <div class="text-[11px] text-slate-400">来自历史会话分析日志</div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 group-hover:scale-105 transition-transform">
+            <i data-lucide="activity" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <!-- 高频榜首技能 -->
+        <div class="bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl p-5 flex items-center justify-between shadow-xs hover:shadow-md hover:border-amber-300/80 transition group">
+          <div class="space-y-1 overflow-hidden pr-2">
+            <span class="text-xs font-semibold text-slate-400">最高调用率技能</span>
+            <div class="text-base font-bold text-slate-800 truncate" :title="topSkillName">
+              {{ topSkillName }}
+            </div>
+            <div class="text-[11px] text-amber-600 font-medium truncate" v-if="overview.top_skills && overview.top_skills.length > 0">
+              会话命中率 {{ overview.top_skills[0].session_hit_rate }} ({{ overview.top_skills[0].call_count }}次)
+            </div>
+            <div class="text-[11px] text-slate-400" v-else>暂无调用数据</div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-500 flex-shrink-0 group-hover:scale-105 transition-transform">
+            <i data-lucide="flame" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- 筛选与控制栏 (清新白底) -->
+      <section class="bg-white/80 backdrop-blur-md border border-slate-200/80 rounded-2xl p-4 flex flex-col md:flex-row gap-3.5 items-center justify-between shadow-xs">
+        <!-- 搜索输入框 -->
+        <div class="relative w-full md:w-80">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input v-model="searchQuery" type="text" placeholder="搜索 Skill 名称、中文概要、标签..." class="w-full bg-slate-50/80 border border-slate-200 hover:border-slate-300 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition">
+          <button v-if="searchQuery" @click="searchQuery = ''" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
+          <!-- 技能类型过滤 Tab -->
+          <div class="flex bg-slate-100/80 p-1 rounded-xl border border-slate-200/60 text-xs">
+            <button v-for="t in typeFilters" :key="t.key" @click="selectedType = t.key" :class="selectedType === t.key ? 'bg-white text-emerald-700 font-bold shadow-xs' : 'text-slate-500 hover:text-slate-800'" class="px-2.5 py-1 rounded-lg transition cursor-pointer">
+              {{ t.label }}
+            </button>
+          </div>
+
+          <!-- 中文领域分类过滤 -->
+          <select v-model="selectedCategory" class="bg-slate-50/80 border border-slate-200 hover:border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 cursor-pointer">
+            <option value="all">全部分类领域</option>
+            <option v-for="c in availableCategories" :key="c" :value="c">{{ c }}</option>
+          </select>
+
+          <!-- 启用状态过滤 -->
+          <select v-model="selectedStatus" class="bg-slate-50/80 border border-slate-200 hover:border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 cursor-pointer">
+            <option value="all">所有状态</option>
+            <option value="enabled">仅启用</option>
+            <option value="disabled">仅禁用</option>
+          </select>
+
+          <!-- 排序方式 (默认添加时间倒序) -->
+          <select v-model="sortBy" class="bg-slate-50/80 border border-slate-200 hover:border-slate-300 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 cursor-pointer">
+            <option value="created_at_desc">最新添加 (时间倒序)</option>
+            <option value="created_at_asc">最早添加 (时间正序)</option>
+            <option value="call_count_desc">调用次数 (高到低)</option>
+            <option value="name_asc">名称 (A-Z)</option>
+            <option value="name_desc">名称 (Z-A)</option>
+            <option value="status">启用状态优先</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- 技能列表网格 (清新白底悬浮卡片) -->
+      <section v-if="filteredSkills.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5">
+        <div v-for="skill in filteredSkills" :key="skill.id" class="bg-white border border-slate-200/80 hover:border-emerald-300 rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-500/8 group relative overflow-hidden">
+          
+          <!-- 禁用状态柔粉微缎带 -->
+          <div v-if="!skill.is_enabled" class="absolute top-0 right-0 w-24 h-24 pointer-events-none overflow-hidden">
+            <div class="bg-rose-50 text-rose-600 text-[10px] font-bold py-0.5 text-center transform rotate-45 translate-x-7 translate-y-3 border-b border-rose-200/80 shadow-2xs">
+              已禁用
+            </div>
+          </div>
+
+          <div>
+            <!-- 头部：生态 & 类型徽章 & 操作开关 -->
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-1.5 flex-wrap gap-y-1">
+                <!-- 平台生态标识徽章 -->
+                <span :class="getPlatformBadgeClass(skill.platform)" class="text-[10px] px-2 py-0.5 rounded-full font-bold border flex items-center space-x-1 shadow-2xs">
+                  <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                  <span>{{ skill.platform_label || getPlatformLabel(skill.platform) }}</span>
+                </span>
+
+                <span :class="getTypeBadgeClass(skill.type)" class="text-[11px] px-2 py-0.5 rounded-full font-semibold border flex items-center space-x-1 shadow-2xs">
+                  <span>{{ getTypeLabel(skill.type, skill.plugin_name) }}</span>
+                </span>
+                <span v-if="skill.category" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80 font-medium">
+                  {{ skill.category }}
+                </span>
+              </div>
+
+              <!-- 启用/禁用切换 Toggle (丝滑翡翠绿) -->
+              <div class="flex items-center space-x-2">
+                <button @click.stop="toggleSkill(skill)" :title="skill.is_enabled ? '点击禁用该技能' : '点击启用该技能'" class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none" :class="skill.is_enabled ? 'bg-emerald-500 shadow-xs shadow-emerald-500/30' : 'bg-slate-300'">
+                  <span class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out" :class="skill.is_enabled ? 'translate-x-4' : 'translate-x-0'"></span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 技能名称 -->
+            <div class="cursor-pointer" @click="openDetail(skill)">
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-emerald-600 transition flex items-center space-x-1.5">
+                <span class="truncate">{{ skill.name }}</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition text-emerald-500 shrink-0"></i>
+              </h3>
+            </div>
+
+            <!-- 中文功能概要 -->
+            <p class="text-xs text-slate-600 line-clamp-2 mt-2 leading-relaxed font-normal">
+              {{ skill.chinese_summary || skill.description || '暂无描述' }}
+            </p>
+
+            <!-- 标签列表 -->
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              <span v-for="tag in (skill.tags || []).slice(0, 3)" :key="tag" class="text-[10px] px-2 py-0.5 bg-slate-50 text-slate-500 rounded-md border border-slate-200/60 font-medium">
+                #{{ tag }}
+              </span>
+            </div>
+          </div>
+
+          <!-- 底部：调用率、添加时间与操作 -->
+          <div class="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
+            <!-- 调用率统计与添加时间 -->
+            <div class="flex items-center space-x-2.5 text-slate-500">
+              <div class="flex items-center space-x-1" :class="skill.call_count > 0 ? 'text-emerald-600 font-semibold' : 'text-slate-400'">
+                <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                <span>{{ skill.call_count }} 次</span>
+              </div>
+              <span class="text-slate-300">|</span>
+              <div class="text-[11px] text-slate-400 truncate flex items-center space-x-0.5" :title="'添加时间: ' + (skill.created_at || '未知')">
+                <i data-lucide="clock" class="w-3 h-3 text-slate-400"></i>
+                <span>{{ skill.created_at ? skill.created_at.slice(0, 10) : '' }}</span>
+              </div>
+            </div>
+
+            <!-- 操作按钮组 -->
+            <div class="flex items-center space-x-1">
+              <!-- 编辑概要 -->
+              <button @click.stop="openEditMeta(skill)" title="编辑中文概要与分类" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition cursor-pointer">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              </button>
+              <!-- 删除按钮（Builtin 禁用删除保护） -->
+              <button @click.stop="confirmDelete(skill)" :disabled="skill.type === 'builtin'" :title="skill.type === 'builtin' ? '内置核心技能受保护，支持通过右上方开关禁用' : '移入安全回收站'" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-400 cursor-pointer">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 空结果提示 -->
+      <section v-else class="text-center py-16 bg-white/80 backdrop-blur-md rounded-3xl border border-slate-200/80 p-8 space-y-3 shadow-xs">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto text-emerald-600">
+          <i data-lucide="inbox" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-800">未找到符合条件的技能</h3>
+        <p class="text-xs text-slate-500">请尝试更换搜索关键字，或调整分类与过滤状态筛选。</p>
+        <button @click="searchQuery = ''; selectedType = 'all'; selectedCategory = 'all'; selectedStatus = 'all'" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-xl border border-emerald-200 transition cursor-pointer">
+          重置所有过滤条件
+        </button>
+      </section>
+    </main>
+
+    <!-- 技能详情抽屉 (清爽通透大宽屏 5xl 双语对照) -->
+    <div v-if="detailSkill" class="fixed inset-0 z-50 overflow-hidden bg-slate-900/30 backdrop-blur-xs flex justify-end" @click.self="detailSkill = null">
+      <div class="w-full max-w-5xl bg-white border-l border-slate-200 h-full flex flex-col shadow-2xl p-6 overflow-y-auto">
+        
+        <!-- 抽屉头部 -->
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div class="flex items-center space-x-2.5">
+            <span :class="getPlatformBadgeClass(detailSkill.platform)" class="text-xs px-2.5 py-0.5 rounded-full font-bold border shadow-2xs">
+              {{ detailSkill.platform_label || getPlatformLabel(detailSkill.platform) }}
+            </span>
+            <span :class="getTypeBadgeClass(detailSkill.type)" class="text-xs px-2.5 py-0.5 rounded-full font-semibold border shadow-2xs">
+              {{ getTypeLabel(detailSkill.type, detailSkill.plugin_name) }}
+            </span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">{{ detailSkill.name }}</h2>
+          </div>
+          <button @click="detailSkill = null" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="mt-6 space-y-6 flex-1">
+          <!-- 核心遥测数据卡 (4 列清爽仪表) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/80 p-4 rounded-2xl border border-slate-200/80 text-center">
+            <div>
+              <span class="text-[11px] font-semibold text-slate-400">被调用频次</span>
+              <div class="text-lg font-black text-emerald-600">{{ detailSkill.call_count }} 次</div>
+            </div>
+            <div>
+              <span class="text-[11px] font-semibold text-slate-400">会话命中率</span>
+              <div class="text-lg font-black text-indigo-600">{{ detailSkill.session_hit_rate }}</div>
+            </div>
+            <div>
+              <span class="text-[11px] font-semibold text-slate-400">本地添加时间</span>
+              <div class="text-xs font-bold text-slate-700 mt-1 truncate" :title="detailSkill.created_at">
+                {{ detailSkill.created_at ? detailSkill.created_at.slice(0, 16) : '未知' }}
+              </div>
+            </div>
+            <div>
+              <span class="text-[11px] font-semibold text-slate-400">最后触发时间</span>
+              <div class="text-xs font-bold text-slate-700 mt-1 truncate" :title="detailSkill.last_called_at">
+                {{ detailSkill.last_called_at ? detailSkill.last_called_at.replace('T', ' ').slice(0, 16) : '暂无记录' }}
+              </div>
+            </div>
+          </div>
+
+          <!-- 中文概要与场景 -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center space-x-1.5">
+                <i data-lucide="file-text" class="w-4 h-4 text-emerald-600"></i>
+                <span>中文功能概要</span>
+              </span>
+              <button @click="openEditMeta(detailSkill)" class="text-xs text-emerald-600 font-semibold hover:underline cursor-pointer">编辑概要</button>
+            </div>
+            <div class="p-4 bg-emerald-50/30 rounded-2xl border border-emerald-100/80 text-xs leading-relaxed text-slate-700 font-normal">
+              {{ detailSkill.chinese_summary }}
+            </div>
+          </div>
+
+          <!-- 物理文件路径与打开定位功能 -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-700 flex items-center space-x-1.5">
+                <i data-lucide="folder" class="w-3.5 h-3.5 text-amber-500"></i>
+                <span>本地物理目录</span>
+              </span>
+              <!-- 快捷打开定位按钮 -->
+              <button @click="openFolder(detailSkill)" :disabled="openingFolder" class="flex items-center space-x-1.5 px-3 py-1 rounded-xl text-xs font-semibold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition shadow-2xs disabled:opacity-60 cursor-pointer" title="在系统资源管理器中打开并直接定位高亮原始 SKILL.md 文件">
+                <i data-lucide="folder-open" :class="{'animate-pulse text-amber-500': openingFolder}" class="w-3.5 h-3.5"></i>
+                <span>{{ openingFolder ? '已唤起资源管理器...' : '打开并定位原始文件' }}</span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200 hover:border-slate-300 transition group">
+              <div class="text-[11px] font-mono text-slate-600 break-all select-all flex-1 pr-2 cursor-pointer hover:text-emerald-600 transition" @click="openFolder(detailSkill)" title="点击直接打开并定位原始文件">
+                {{ detailSkill.path }}
+              </div>
+              <button @click="openFolder(detailSkill)" :disabled="openingFolder" class="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-lg transition shrink-0 cursor-pointer" title="在系统资源管理器中打开并定位文件">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- 原英文描述（折叠展示） -->
+          <div class="space-y-1.5" v-if="detailSkill.description">
+            <details class="group bg-slate-50/80 rounded-2xl border border-slate-200/80 text-xs p-3.5">
+              <summary class="cursor-pointer text-slate-600 hover:text-slate-900 font-semibold flex items-center justify-between select-none">
+                <span>查看 YAML 原始英文描述 (Original Description)</span>
+                <span class="text-[11px] text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div class="mt-2.5 pt-2.5 border-t border-slate-200 text-slate-600 font-mono text-[11px] leading-relaxed">
+                {{ detailSkill.description }}
+              </div>
+            </details>
+          </div>
+
+          <!-- 详细文档双语同步对照模块 -->
+          <div class="space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/90 p-2.5 rounded-2xl border border-slate-200">
+              <!-- 双语对照指示与同步滚动控制 -->
+              <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-emerald-700 shadow-2xs">
+                  <i data-lucide="columns-2" class="w-4 h-4"></i>
+                  <span>双语同步对照</span>
+                </div>
+                <button @click="syncScroll = !syncScroll" :class="syncScroll ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-slate-200 text-slate-400 hover:text-slate-600'" class="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition cursor-pointer shadow-2xs" :title="syncScroll ? '已开启双向同步滑动，点击停用' : '已停用同步，点击开启双向同步滑动'">
+                  <i data-lucide="link" class="w-3.5 h-3.5" :class="{'text-emerald-600': syncScroll}"></i>
+                  <span>{{ syncScroll ? '同步滑动: 开启' : '同步滑动: 独立' }}</span>
+                </button>
+              </div>
+
+              <!-- 快捷操作按钮群 -->
+              <div class="flex items-center space-x-2">
+                <button @click="openEditDoc(detailSkill, 'original')" class="flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 transition shadow-2xs cursor-pointer" title="编辑本地物理 SKILL.md 原文">
+                  <i data-lucide="file-edit" class="w-3.5 h-3.5 text-sky-500"></i>
+                  <span>编辑原文</span>
+                </button>
+                <button @click="openEditDoc(detailSkill, 'zh')" class="flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 hover:border-slate-300 transition shadow-2xs cursor-pointer" title="编辑中文使用指南对照">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5 text-emerald-600"></i>
+                  <span>编辑译文</span>
+                </button>
+                <button @click="translateCurrentSkill(Boolean(detailSkill.chinese_body))" :disabled="translating" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-500/20 transition disabled:opacity-50 cursor-pointer">
+                  <i data-lucide="languages" :class="{'animate-spin': translating}" class="w-3.5 h-3.5"></i>
+                  <span>{{ translating ? '正在 Edge 翻译...' : (detailSkill.chinese_body ? '重新翻译' : '一键翻译') }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 双语并排分栏视图：即时丝滑同步滑动 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- 左栏：中文指南 -->
+              <div class="flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+                <div class="px-4 py-2.5 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between">
+                  <div class="text-xs font-bold text-emerald-700 flex items-center space-x-1.5">
+                    <span>🇨🇳 中文翻译版本</span>
+                    <span v-if="!detailSkill.chinese_body && !translating" class="text-[11px] text-amber-600 font-normal">(点击顶部一键翻译)</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="text-[10px] text-slate-400 font-mono">Edge 端口引擎</span>
+                    <button @click="openEditDoc(detailSkill, 'zh')" class="text-[11px] text-slate-500 hover:text-emerald-600 flex items-center space-x-0.5 cursor-pointer font-medium">
+                      <i data-lucide="edit-3" class="w-3 h-3"></i>
+                      <span>编辑</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 滚动正文容器 (无 scroll-smooth 延迟，双向秒级响应) -->
+                <div ref="zhScrollRef" @scroll="onZhScroll" class="p-5 text-xs leading-relaxed prose max-w-none h-[540px] overflow-y-auto select-text relative">
+                  <!-- 正在翻译的浮动横幅 -->
+                  <div v-if="translating" class="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center space-x-2.5 text-emerald-800">
+                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-emerald-600"></i>
+                    <span class="text-xs font-semibold">Edge 官方端口正在并发翻译中，大约 1~2 秒即可呈现...</span>
+                  </div>
+
+                  <!-- 中文内容 -->
+                  <div v-if="detailSkill.chinese_body" v-html="renderMarkdown(detailSkill.chinese_body)"></div>
+
+                  <!-- 尚未翻译时：提供一键操作并展示原文垫底，确保两边同等高度可同步滑动 -->
+                  <div v-else class="space-y-4">
+                    <div class="p-4 bg-emerald-50/40 rounded-xl border border-emerald-100 text-center space-y-2">
+                      <p class="text-xs text-slate-600 font-medium">尚未生成中文对照，点击上方【一键翻译】自动生成</p>
+                      <button @click="translateCurrentSkill(true)" :disabled="translating" class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-xs rounded-xl shadow-xs transition cursor-pointer">
+                        立即调用 Edge 端口汉化
+                      </button>
+                    </div>
+                    <div class="opacity-50" v-html="renderMarkdown(detailSkill.body || '暂无详细指引')"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 右栏：英文原版 -->
+              <div class="flex flex-col bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+                <div class="px-4 py-2.5 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between">
+                  <div class="text-xs font-bold text-slate-700 flex items-center space-x-1.5">
+                    <span>🇬🇧 英文原始版本 (SKILL.md)</span>
+                  </div>
+                  <button @click="openEditDoc(detailSkill, 'original')" class="text-[11px] text-slate-500 hover:text-sky-600 flex items-center space-x-0.5 cursor-pointer font-medium" title="直接编辑并保存回本地 SKILL.md 文件">
+                    <i data-lucide="file-edit" class="w-3 h-3"></i>
+                    <span>编辑原文</span>
+                  </button>
+                </div>
+
+                <!-- 滚动正文容器 (无 scroll-smooth 延迟，双向秒级响应) -->
+                <div ref="enScrollRef" @scroll="onEnScroll" class="p-5 text-xs leading-relaxed prose max-w-none h-[540px] overflow-y-auto select-text" v-html="renderMarkdown(detailSkill.body || '无详细文档内容')">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 抽屉底部操作 -->
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-6">
+          <button @click="toggleSkill(detailSkill)" class="flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer" :class="detailSkill.is_enabled ? 'bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-sm shadow-emerald-500/20'">
+            <i :data-lucide="detailSkill.is_enabled ? 'pause-circle' : 'play-circle'" class="w-4 h-4"></i>
+            <span>{{ detailSkill.is_enabled ? '临时禁用此技能' : '立即启用此技能' }}</span>
+          </button>
+
+          <button @click="confirmDelete(detailSkill)" :disabled="detailSkill.type === 'builtin'" class="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition disabled:opacity-30 cursor-pointer">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            <span>移入回收站</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 创建 / 导入技能模态框 (清爽白底) -->
+    <div v-if="showCreateModal" class="fixed inset-0 z-50 overflow-hidden bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-xl bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">安装或新建 Skill</h3>
+              <p class="text-[11px] text-slate-500">支持手动表单定义或通过 Git 仓库一键克隆安装</p>
+            </div>
+          </div>
+          <button @click="showCreateModal = false" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- 模式切换 -->
+        <div class="flex bg-slate-100 p-1 rounded-xl text-xs border border-slate-200/80">
+          <button @click="createMode = 'form'" :class="createMode === 'form' ? 'bg-white text-emerald-700 font-bold shadow-xs' : 'text-slate-500 hover:text-slate-800'" class="flex-1 py-1.5 rounded-lg transition text-center cursor-pointer">
+            手动表单创建
+          </button>
+          <button @click="createMode = 'git'" :class="createMode === 'git' ? 'bg-white text-emerald-700 font-bold shadow-xs' : 'text-slate-500 hover:text-slate-800'" class="flex-1 py-1.5 rounded-lg transition text-center cursor-pointer">
+            Git 仓库克隆导入
+          </button>
+        </div>
+
+        <!-- 表单模式 -->
+        <div v-if="createMode === 'form'" class="space-y-3.5 text-xs">
+          <!-- 所属平台生态 -->
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1.5">所属平台生态 *</label>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border cursor-pointer transition shadow-2xs" :class="newSkill.platform === 'antigravity' ? 'border-emerald-500 bg-emerald-50/60 text-emerald-900 font-bold ring-1 ring-emerald-500/20' : 'border-slate-200 bg-slate-50/80 text-slate-600 hover:bg-slate-100'">
+                <input type="radio" value="antigravity" v-model="newSkill.platform" class="hidden">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span class="text-xs">Antigravity</span>
+              </label>
+
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border cursor-pointer transition shadow-2xs" :class="newSkill.platform === 'claude' ? 'border-amber-500 bg-amber-50/60 text-amber-900 font-bold ring-1 ring-amber-500/20' : 'border-slate-200 bg-slate-50/80 text-slate-600 hover:bg-slate-100'">
+                <input type="radio" value="claude" v-model="newSkill.platform" class="hidden">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span class="text-xs">Claude Code</span>
+              </label>
+
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border cursor-pointer transition shadow-2xs" :class="newSkill.platform === 'codex' ? 'border-indigo-500 bg-indigo-50/60 text-indigo-900 font-bold ring-1 ring-indigo-500/20' : 'border-slate-200 bg-slate-50/80 text-slate-600 hover:bg-slate-100'">
+                <input type="radio" value="codex" v-model="newSkill.platform" class="hidden">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                <span class="text-xs">Codex</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1">技能标识名称 (Name) *</label>
+            <input v-model="newSkill.name" type="text" placeholder="例如：clean-code-reviewer" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 font-mono">
+          </div>
+
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1">中文功能概要 *</label>
+            <input v-model="newSkill.chinese_summary" type="text" placeholder="用一句话阐述核心能力与触发时机..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-slate-700 font-semibold mb-1">功能分类</label>
+              <input v-model="newSkill.category" type="text" placeholder="例如：代码开发、质量保证" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10">
+            </div>
+            <div>
+              <label class="block text-slate-700 font-semibold mb-1">安装位置</label>
+              <select v-model="newSkill.target_type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 cursor-pointer">
+                <option value="global">
+                  全局目录 ({{ newSkill.platform === 'claude' ? '~/.claude/skills' : (newSkill.platform === 'codex' ? '~/.codex/skills' : '~/.gemini/config/skills') }})
+                </option>
+                <option value="workspace">
+                  当前工作区 ({{ newSkill.platform === 'claude' ? '.claude/skills' : (newSkill.platform === 'codex' ? '.codex/skills' : '.agents/skills') }})
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1">SKILL.md 正文指引 (Markdown)</label>
+            <textarea v-model="newSkill.content" rows="4" placeholder="# 指南标题&#10;&#10;详细说明智能体应当遵循的操作规范..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 font-mono text-[11px]"></textarea>
+          </div>
+        </div>
+
+        <!-- Git 克隆模式 -->
+        <div v-else class="space-y-3.5 text-xs">
+          <!-- 目标平台生态 -->
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1.5">目标平台生态 *</label>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border cursor-pointer transition shadow-2xs" :class="gitForm.platform === 'antigravity' ? 'border-emerald-500 bg-emerald-50/60 text-emerald-900 font-bold ring-1 ring-emerald-500/20' : 'border-slate-200 bg-slate-50/80 text-slate-600 hover:bg-slate-100'">
+                <input type="radio" value="antigravity" v-model="gitForm.platform" class="hidden">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span class="text-xs">Antigravity</span>
+              </label>
+
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border cursor-pointer transition shadow-2xs" :class="gitForm.platform === 'claude' ? 'border-amber-500 bg-amber-50/60 text-amber-900 font-bold ring-1 ring-amber-500/20' : 'border-slate-200 bg-slate-50/80 text-slate-600 hover:bg-slate-100'">
+                <input type="radio" value="claude" v-model="gitForm.platform" class="hidden">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span class="text-xs">Claude Code</span>
+              </label>
+
+              <label class="flex items-center space-x-2 p-2.5 rounded-xl border cursor-pointer transition shadow-2xs" :class="gitForm.platform === 'codex' ? 'border-indigo-500 bg-indigo-50/60 text-indigo-900 font-bold ring-1 ring-indigo-500/20' : 'border-slate-200 bg-slate-50/80 text-slate-600 hover:bg-slate-100'">
+                <input type="radio" value="codex" v-model="gitForm.platform" class="hidden">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                <span class="text-xs">Codex</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1">Git 仓库 URL *</label>
+            <input v-model="gitForm.repo_url" type="text" placeholder="https://github.com/username/skill-repo.git" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-700 font-semibold mb-1">自定义技能名称 (可选)</label>
+            <input v-model="gitForm.custom_name" type="text" placeholder="留空则自动根据仓库名命名" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10">
+          </div>
+          <p class="text-[11px] text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            提示：将使用系统 git 执行浅克隆（depth=1）至全局技能目录。如果该仓库未包含 SKILL.md，将自动基于 README 创建基础规范。
+          </p>
+        </div>
+
+        <!-- 模态底部按钮 -->
+        <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
+          <button @click="showCreateModal = false" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 transition cursor-pointer">
+            取消
+          </button>
+          <button @click="submitCreate" :disabled="submitting" class="px-5 py-2 rounded-xl text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm shadow-emerald-500/20 transition disabled:opacity-50 cursor-pointer">
+            {{ submitting ? '正在创建...' : '立即确认创建' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 安全回收站管理模态框 (清爽白底) -->
+    <div v-if="showTrashModal" class="fixed inset-0 z-50 overflow-hidden bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-2xl bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4 max-h-[85vh]">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-500">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900">技能安全回收站</h3>
+              <p class="text-[11px] text-slate-500">被删除的技能将安全暂存此处，可随时一键原路还原</p>
+            </div>
+          </div>
+          <button @click="showTrashModal = false" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- 列表 -->
+        <div class="flex-1 overflow-y-auto space-y-2.5 pr-1">
+          <div v-if="trashItems.length === 0" class="text-center py-12 text-slate-400 text-xs">
+            回收站目前为空，暂无已删除技能。
+          </div>
+          <div v-for="item in trashItems" :key="item.trash_id" class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between text-xs">
+            <div class="space-y-1">
+              <div class="flex items-center space-x-2">
+                <span :class="getPlatformBadgeClass(item.platform)" class="text-[9px] px-1.5 py-0.2 rounded-full font-bold border">
+                  {{ item.platform_label || getPlatformLabel(item.platform) }}
+                </span>
+                <span class="font-bold text-slate-800">{{ item.name }}</span>
+              </div>
+              <div class="text-[11px] text-slate-400 font-mono truncate max-w-md">{{ item.original_path }}</div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button @click="restoreTrash(item.trash_id)" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold transition cursor-pointer">
+                还原
+              </button>
+              <button @click="purgeTrash(item.trash_id)" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-lg text-xs font-semibold transition cursor-pointer">
+                彻底粉碎
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-3 border-t border-slate-100">
+          <button @click="showTrashModal = false" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs text-slate-700 font-semibold transition cursor-pointer">
+            关闭
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 中文概要编辑模态框 (清爽白底) -->
+    <div v-if="editingMeta" class="fixed inset-0 z-50 overflow-hidden bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h3 class="text-base font-bold text-slate-900">编辑中文功能概要与分类</h3>
+          <button @click="editingMeta = null" class="text-slate-400 hover:text-slate-700 p-1">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="block text-slate-600 font-semibold mb-1">技能名称</label>
+            <div class="px-3 py-2 bg-slate-50 rounded-xl font-mono text-slate-700 border border-slate-200">{{ editingMeta.name }}</div>
+          </div>
+          <div>
+            <label class="block text-slate-600 font-semibold mb-1">中文功能概要 *</label>
+            <textarea v-model="editingMeta.summary" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10"></textarea>
+          </div>
+          <div>
+            <label class="block text-slate-600 font-semibold mb-1">分类名称</label>
+            <input v-model="editingMeta.category" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10">
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100 text-xs">
+          <button @click="editingMeta = null" class="px-4 py-2 rounded-xl text-slate-500 hover:bg-slate-100 transition cursor-pointer font-semibold">取消</button>
+          <button @click="saveMeta" class="px-5 py-2 rounded-xl font-semibold bg-emerald-500 hover:bg-emerald-600 text-white transition cursor-pointer shadow-xs">保存生效</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 文档编辑模态框 (支持直接编辑保存英文原文 SKILL.md 与 中文对照 - 清爽白底) -->
+    <div v-if="editingDoc" class="fixed inset-0 z-50 overflow-hidden bg-slate-900/30 backdrop-blur-xs flex items-center justify-center p-4">
+      <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4 max-h-[90vh]">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center space-x-3">
+            <!-- 模式切换 Tab -->
+            <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200/80 text-xs">
+              <button @click="editingDoc.tab = 'original'" :class="editingDoc.tab === 'original' ? 'bg-white text-sky-700 font-bold shadow-xs' : 'text-slate-500 hover:text-slate-800'" class="px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 cursor-pointer">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                <span>🇬🇧 英文原始文件 (SKILL.md)</span>
+              </button>
+              <button @click="editingDoc.tab = 'zh'" :class="editingDoc.tab === 'zh' ? 'bg-white text-emerald-700 font-bold shadow-xs' : 'text-slate-500 hover:text-slate-800'" class="px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 cursor-pointer">
+                <i data-lucide="languages" class="w-3.5 h-3.5"></i>
+                <span>🇨🇳 中文指南对照</span>
+              </button>
+            </div>
+            <h3 class="text-sm font-bold text-slate-800 font-mono">{{ editingDoc.name }}</h3>
+          </div>
+          <button @click="editingDoc = null" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- 英文原文编辑模式 -->
+        <div v-if="editingDoc.tab === 'original'" class="space-y-2 flex-1 flex flex-col min-h-0 text-xs">
+          <div class="flex items-center justify-between text-slate-500">
+            <span>本地磁盘物理 <code class="text-sky-600 font-mono">SKILL.md</code> 源码（点击保存将直接写回本地文件）：</span>
+            <span class="text-[11px] text-sky-600 font-medium">支持 Markdown 语法与 YAML Frontmatter</span>
+          </div>
+          <textarea v-model="editingDoc.originalContent" rows="18" placeholder="输入或粘贴 Markdown 原文指引..." class="flex-1 w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-800 focus:outline-none focus:bg-white focus:border-sky-500 focus:ring-2 focus:ring-sky-500/10 font-mono text-[11px] leading-relaxed resize-none selection:bg-sky-500 selection:text-white"></textarea>
+        </div>
+
+        <!-- 中文对照编辑模式 -->
+        <div v-else class="space-y-2 flex-1 flex flex-col min-h-0 text-xs">
+          <div class="flex items-center justify-between text-slate-500">
+            <span>中文使用指南 Markdown 内容（保存后将持久化缓存并在双语对照中呈现）：</span>
+            <span class="text-[11px] text-emerald-600 font-medium">Edge 翻译对照缓存</span>
+          </div>
+          <textarea v-model="editingDoc.zhContent" rows="18" placeholder="输入中文指南内容..." class="flex-1 w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-800 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 font-mono text-[11px] leading-relaxed resize-none selection:bg-emerald-500 selection:text-white"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+          <div class="text-[11px] text-slate-400">
+            <span v-if="editingDoc.tab === 'original'">⚠️ 保存原文后，系统将自动询问您是否重新汉化生成对应的中文对照。</span>
+            <span v-else>💡 保存后立即可在左侧【中文翻译版本】中查看渲染效果。</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button @click="editingDoc = null" class="px-4 py-2 rounded-xl text-slate-500 hover:bg-slate-100 transition cursor-pointer font-semibold">取消</button>
+            <button @click="saveDocContent" :disabled="savingDoc" class="px-5 py-2 rounded-xl font-semibold transition shadow-sm flex items-center space-x-1.5 cursor-pointer" :class="editingDoc.tab === 'original' ? 'bg-sky-600 hover:bg-sky-500 text-white shadow-sky-600/20' : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20'">
+              <i data-lucide="save" class="w-4 h-4"></i>
+              <span>{{ savingDoc ? '正在写入磁盘...' : (editingDoc.tab === 'original' ? '保存并写回 SKILL.md 原文' : '保存中文指南') }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

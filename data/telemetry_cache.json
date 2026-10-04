@@ -1,0 +1,219 @@
+{
+  "total_sessions": 106,
+  "skills": {
+    "writing-plans": {
+      "call_count": 2,
+      "sessions": [
+        "0177c3a5-e124-4597-9162-fa2aea357f94",
+        "ee59332f-ad93-406a-be1f-93b3e4b85e8e"
+      ],
+      "last_called_at": "2026-07-04T08:50:54Z"
+    },
+    "executing-plans": {
+      "call_count": 1,
+      "sessions": [
+        "0177c3a5-e124-4597-9162-fa2aea357f94"
+      ],
+      "last_called_at": "2026-05-21T10:18:22Z"
+    },
+    "subagent-driven-development": {
+      "call_count": 1,
+      "sessions": [
+        "0177c3a5-e124-4597-9162-fa2aea357f94"
+      ],
+      "last_called_at": "2026-05-21T10:18:24Z"
+    },
+    "writing-skills": {
+      "call_count": 2,
+      "sessions": [
+        "02ccef6f-97ab-4af1-abe9-da19ab56fafc",
+        "f162627d-e0d7-482d-b7b9-cf9881a70077"
+      ],
+      "last_called_at": "2026-06-20T09:39:11Z"
+    },
+    "cozy_ui_design": {
+      "call_count": 2,
+      "sessions": [
+        "02ccef6f-97ab-4af1-abe9-da19ab56fafc",
+        "f162627d-e0d7-482d-b7b9-cf9881a70077"
+      ],
+      "last_called_at": "2026-06-20T09:39:11Z"
+    },
+    "brainstorming": {
+      "call_count": 3,
+      "sessions": [
+        "02ccef6f-97ab-4af1-abe9-da19ab56fafc",
+        "0324480b-adf0-4ff3-9003-a26effc09020",
+        "f162627d-e0d7-482d-b7b9-cf9881a70077"
+      ],
+      "last_called_at": "2026-06-20T09:39:29Z"
+    },
+    "frontend-design": {
+      "call_count": 6,
+      "sessions": [
+        "02ccef6f-97ab-4af1-abe9-da19ab56fafc",
+        "19e9a617-baf6-42b2-a2e6-356aac1151b4",
+        "1dd7443d-2ce6-4a80-b350-0cda5c01da7a",
+        "56aedde2-215e-4ffc-940b-783caa351dc1",
+        "9fab2dee-7d28-47d1-a44b-6a25fe59a673",
+        "f162627d-e0d7-482d-b7b9-cf9881a70077"
+      ],
+      "last_called_at": "2026-09-15T06:16:10Z"
+    },
+    "to-prd": {
+      "call_count": 3,
+      "sessions": [
+        "02ccef6f-97ab-4af1-abe9-da19ab56fafc",
+        "369fe40f-7f72-454d-8975-401ac0a2742c",
+        "9fab2dee-7d28-47d1-a44b-6a25fe59a673"
+      ],
+      "last_called_at": "2026-06-20T09:27:13Z"
+    },
+    "using-superpowers": {
+      "call_count": 1,
+      "sessions": [
+        "0324480b-adf0-4ff3-9003-a26effc09020"
+      ],
+      "last_called_at": "2026-05-21T08:24:50Z"
+    },
+    "impeccable": {
+      "call_count": 1,
+      "sessions": [
+        "080eaa3a-6976-4a80-baf0-277332cda0a8"
+      ],
+      "last_called_at": "2026-09-15T05:36:54Z"
+    },
+    "agy-customizations": {
+      "call_count": 8,
+      "sessions": [
+        "3569bb20-c263-4b3a-bbec-689309870ed8",
+        "3b6d4886-3236-4357-9184-448ebafc28c8",
+        "c7c70fdf-1658-447c-92ae-c8f79fa58fab",
+        "b5418825-dd7e-47ae-b6fc-b5d3d3f03c0b"
+      ],
+      "last_called_at": "2026-10-04T04:51:30Z"
+    },
+    "antigravity_guide": {
+      "call_count": 1,
+      "sessions": [
+        "3b6d4886-3236-4357-9184-448ebafc28c8"
+      ],
+      "last_called_at": "2026-10-01T05:21:21Z"
+    },
+    "canvas-ui": {
+      "call_count": 3,
+      "sessions": [
+        "c7c70fdf-1658-447c-92ae-c8f79fa58fab",
+        "3569bb20-c263-4b3a-bbec-689309870ed8"
+      ],
+      "last_called_at": "2026-10-04T04:57:18Z"
+    },
+    "healing-prd-agent": {
+      "call_count": 2,
+      "sessions": [
+        "e9bb9a06-e6ab-439e-bff1-9a546db7ed20",
+        "f162627d-e0d7-482d-b7b9-cf9881a70077"
+      ],
+      "last_called_at": "2026-06-20T13:24:50Z"
+    },
+    "verification-before-completion": {
+      "call_count": 1,
+      "sessions": [
+        "ee59332f-ad93-406a-be1f-93b3e4b85e8e"
+      ],
+      "last_called_at": "2026-07-04T08:52:55Z"
+    },
+    "demo-editor-test": {
+      "call_count": 1,
+      "sessions": [
+        "3569bb20-c263-4b3a-bbec-689309870ed8"
+      ],
+      "last_called_at": "2026-10-03T15:05:48Z"
+    },
+    "apple-design": {
+      "call_count": 2,
+      "sessions": [
+        "3569bb20-c263-4b3a-bbec-689309870ed8"
+      ],
+      "last_called_at": "2026-10-04T04:53:14Z"
+    },
+    "animate": {
+      "call_count": 1,
+      "sessions": [
+        "b5418825-dd7e-47ae-b6fc-b5d3d3f03c0b"
+      ],
+      "last_called_at": "2026-10-04T04:51:33Z"
+    }
+  },
+  "file_mtimes": {
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\0177c3a5-e124-4597-9162-fa2aea357f94\\.system_generated\\logs\\transcript.jsonl": 1781055747.7517183,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\02ccef6f-97ab-4af1-abe9-da19ab56fafc\\.system_generated\\logs\\transcript.jsonl": 1781947834.6040564,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\0324480b-adf0-4ff3-9003-a26effc09020\\.system_generated\\logs\\transcript.jsonl": 1779352724.2511106,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\080eaa3a-6976-4a80-baf0-277332cda0a8\\.system_generated\\logs\\transcript.jsonl": 1789463320.2644045,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\11172bb7-799e-4d7c-84bc-6b277e71eec5\\.system_generated\\logs\\transcript.jsonl": 1789717747.3845623,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\1837732e-ab27-4dac-8266-1b30b3f87153\\.system_generated\\logs\\transcript.jsonl": 1781960805.8506906,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\1849fda0-2da9-4a57-8cf9-3e3a69a63479\\.system_generated\\logs\\transcript.jsonl": 1781777438.8565178,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\19e9a617-baf6-42b2-a2e6-356aac1151b4\\.system_generated\\logs\\transcript.jsonl": 1789454927.629179,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\1acd2016-016d-4b46-b5f3-ed6c47d406b0\\.system_generated\\logs\\transcript.jsonl": 1789984201.716295,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\1dd7443d-2ce6-4a80-b350-0cda5c01da7a\\.system_generated\\logs\\transcript.jsonl": 1789025351.757955,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\1e9f06ec-6c4c-468e-904a-ee1a24f13090\\.system_generated\\logs\\transcript.jsonl": 1780830780.3915157,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\2459e355-733d-4862-b8c5-9152ac99174a\\.system_generated\\logs\\transcript.jsonl": 1789619154.7963915,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\26e8931a-43f3-40e4-bd9c-914b8b3b6141\\.system_generated\\logs\\transcript.jsonl": 1783582195.7438025,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\2c9356f6-72fd-427f-8495-e3bd5b6ddc72\\.system_generated\\logs\\transcript.jsonl": 1789023191.353399,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\2d281c5f-5b58-4a2a-85bb-8534bd851b0f\\.system_generated\\logs\\transcript.jsonl": 1781059667.8778489,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\30c233eb-6d57-4cb0-a704-9c98b5f1a2a7\\.system_generated\\logs\\transcript.jsonl": 1789023264.6987305,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\3569bb20-c263-4b3a-bbec-689309870ed8\\.system_generated\\logs\\transcript.jsonl": 1791091186.0888016,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\369fe40f-7f72-454d-8975-401ac0a2742c\\.system_generated\\logs\\transcript.jsonl": 1781783434.4783528,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\3b6d4886-3236-4357-9184-448ebafc28c8\\.system_generated\\logs\\transcript.jsonl": 1790832246.6225965,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\53211d81-e52e-4f17-ab9a-ebd02a24a9f5\\.system_generated\\logs\\transcript.jsonl": 1781775464.0171938,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\56aedde2-215e-4ffc-940b-783caa351dc1\\.system_generated\\logs\\transcript.jsonl": 1789452926.1342793,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\56cb3c08-22b6-4e4b-b945-6972de5419de\\.system_generated\\logs\\transcript.jsonl": 1781779906.400251,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\5e6cacab-bbcc-45db-858d-4695f99e0c02\\.system_generated\\logs\\transcript.jsonl": 1783925171.698251,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\609bd0b0-b9d8-40e5-a509-201b337e9b4c\\.system_generated\\logs\\transcript.jsonl": 1788699720.3297205,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\68be8b1f-c1a1-472a-8177-fc3596dc9173\\.system_generated\\logs\\transcript.jsonl": 1783670906.7525034,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\6fa6a2bd-c40c-4eef-9b90-d628de715fa0\\.system_generated\\logs\\transcript.jsonl": 1783934929.9155488,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\75a9139f-909c-40dc-b41d-d65600d4dfde\\.system_generated\\logs\\transcript.jsonl": 1790058656.4927628,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\75cdeb53-df9a-442e-b0e7-159d1c44bf84\\.system_generated\\logs\\transcript.jsonl": 1781780015.0919583,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\778bb388-c12a-4650-b972-4c622716ccc1\\.system_generated\\logs\\transcript.jsonl": 1789023143.1526916,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\7a07452c-27c8-4c9c-9509-7b15bab29317\\.system_generated\\logs\\transcript.jsonl": 1782465436.1022785,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\7f75e312-8601-4d63-b9ed-35205382cc92\\.system_generated\\logs\\transcript.jsonl": 1789023059.1307747,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\8353380b-858c-4c8e-bf46-88515ef9c789\\.system_generated\\logs\\transcript.jsonl": 1790734262.719275,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\89d4df95-da64-46da-a9d1-d7b701d1a8d8\\.system_generated\\logs\\transcript.jsonl": 1789366251.436096,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\8b7ac336-0f7d-4d7e-b638-9895651fd3af\\.system_generated\\logs\\transcript.jsonl": 1790056825.3391714,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\916a9bf3-39c8-4c4c-bd9d-370163ec5de4\\.system_generated\\logs\\transcript.jsonl": 1789367155.8217795,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\9fab2dee-7d28-47d1-a44b-6a25fe59a673\\.system_generated\\logs\\transcript.jsonl": 1781778427.85771,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\b150493f-9f19-4cba-9d57-43838500f030\\.system_generated\\logs\\transcript.jsonl": 1780908855.0270052,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\b2170529-806f-42c1-98b7-02037ebec97d\\.system_generated\\logs\\transcript.jsonl": 1784880716.0353537,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\b3a58ec7-5248-49ad-8957-ecadea0f9875\\.system_generated\\logs\\transcript.jsonl": 1789023622.8213887,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\c1501e93-0970-4c79-b321-0a638c4ff397\\.system_generated\\logs\\transcript.jsonl": 1789026136.4591315,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\c3ec0fd0-7b80-4bc1-a0b9-e16e278003a1\\.system_generated\\logs\\transcript.jsonl": 1783671216.088676,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\c3f95050-027e-4940-aee7-303653b710a8\\.system_generated\\logs\\transcript.jsonl": 1783581670.819929,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\c6d1c9b3-91cc-4efb-9f89-2949ad5d25ac\\.system_generated\\logs\\transcript.jsonl": 1789033000.640775,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\c7415932-d053-4ccb-9565-ffb9a476a262\\.system_generated\\logs\\transcript.jsonl": 1788500897.2251873,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\c7c70fdf-1658-447c-92ae-c8f79fa58fab\\.system_generated\\logs\\transcript.jsonl": 1789959671.552159,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\cc88769b-3515-48ac-950a-2417c14e475c\\.system_generated\\logs\\transcript.jsonl": 1783929108.6935916,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\cc8c8963-b3fa-485f-bca1-87b875a2b1da\\.system_generated\\logs\\transcript.jsonl": 1779261830.6985571,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\ce31cdb2-4926-4368-b34c-300c7ed4289a\\.system_generated\\logs\\transcript.jsonl": 1789118911.756575,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\db3680be-7cc9-49d2-9fb5-970f1c513570\\.system_generated\\logs\\transcript.jsonl": 1783581921.5046175,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\dfdaa577-bdac-4a60-8787-df5cea09fa78\\.system_generated\\logs\\transcript.jsonl": 1789461409.895031,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\e3741c09-484a-43fd-a088-fcf87b0fa9d3\\.system_generated\\logs\\transcript.jsonl": 1781779511.144636,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\e5bae8bc-9810-47d7-a5ab-6fa2eeae95bd\\.system_generated\\logs\\transcript.jsonl": 1781779855.662943,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\e8078ffc-5ec3-4209-bfa2-a9553a00a58b\\.system_generated\\logs\\transcript.jsonl": 1789459983.7948163,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\e9bb9a06-e6ab-439e-bff1-9a546db7ed20\\.system_generated\\logs\\transcript.jsonl": 1781962057.9382267,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\ebe19fa9-fd1d-4af4-8f83-155344018e62\\.system_generated\\logs\\transcript.jsonl": 1788423127.0371995,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\ee59332f-ad93-406a-be1f-93b3e4b85e8e\\.system_generated\\logs\\transcript.jsonl": 1783155933.8572307,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\f162627d-e0d7-482d-b7b9-cf9881a70077\\.system_generated\\logs\\transcript.jsonl": 1781952821.37332,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\f2766485-011c-4e83-85cf-dae89e9cc611\\.system_generated\\logs\\transcript.jsonl": 1788699653.5560231,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\f4835063-ecf6-483f-9c95-de741af1e4eb\\.system_generated\\logs\\transcript.jsonl": 1789368671.2335482,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\f711baea-0caf-4aff-aa8b-7f88dd2aadd6\\.system_generated\\logs\\transcript.jsonl": 1783564484.1976836,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\f97763e8-c8e7-4b29-9942-5d920c34b401\\.system_generated\\logs\\transcript.jsonl": 1788701026.7969534,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\fa5c0b5f-279c-456b-a6a8-a7b65713daa8\\.system_generated\\logs\\transcript.jsonl": 1789350507.3391871,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\fc340e06-b6ab-42cb-b7ac-cdeb4bc84dd9\\.system_generated\\logs\\transcript.jsonl": 1781775152.9233544,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\fcae592b-5e27-42f2-a170-b26770e59094\\.system_generated\\logs\\transcript.jsonl": 1788699647.282227,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\0c93475a-f87e-4a66-9083-949befd5a89a\\.system_generated\\logs\\transcript.jsonl": 1791091147.561729,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\45907ca0-c100-4ee4-8fbe-f23ed6f3b2db\\.system_generated\\logs\\transcript.jsonl": 1791088026.3800006,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\5fbe790b-bc00-413b-a4cf-738889defd21\\.system_generated\\logs\\transcript.jsonl": 1791037402.2706807,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\b5418825-dd7e-47ae-b6fc-b5d3d3f03c0b\\.system_generated\\logs\\transcript.jsonl": 1791089502.623206,
+    "C:\\Users\\Administrator.DESKTOP-VR6B7CR\\.gemini\\antigravity\\brain\\be08439a-c02c-4850-b726-51297eb6477e\\.system_generated\\logs\\transcript.jsonl": 1791005594.1598048
+  }
+}
