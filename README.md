@@ -9,11 +9,15 @@
 1. **多层级技能全量扫描识别**：
    - 自动探测并归类：系统内置（Builtin）、全局配置（Global）、插件技能（Plugins）以及工作区（Workspace）中的所有 Skills。
    - 自动识别并解析 YAML Frontmatter 元数据及文档正文。
+     <img width="1908" height="894" alt="image" src="https://github.com/user-attachments/assets/cb566fd6-88cf-4867-b2ba-13fcde187ba2" />
+
 
 2. **智能中文功能概要**：
    - 内置高质量中文知识库映射，覆盖开发工作流、需求规划、TDD测试、架构审查、前端UI、生信分析等常用技能。
    - 提取并提炼清晰的中文功能说明与场景标签。
    - 支持在 Web 界面上即时编辑自定义中文概要，数据持久化保存在本地。
+     <img width="1908" height="894" alt="image" src="https://github.com/user-attachments/assets/1ccf8945-b547-465e-b03c-d32d1f910361" />
+
 
 3. **被调用率深度遥测（Telemetry）**：
    - 自动分析本地 `~/.gemini/antigravity/brain/*/transcript.jsonl` 会话历史日志。
@@ -27,7 +31,8 @@
    - **Git 仓库一键导入**：输入 GitHub/GitLab 仓库链接，浅克隆安装至全局技能库。
    - **安全删除与回收站**：删除后进入专属回收站，支持随时一键还原或彻底粉碎；对系统内置核心技能启用防误删保护。
 
----
+---<img width="1908" height="894" alt="image" src="https://github.com/user-attachments/assets/141d42dd-cd4e-4c90-a630-cec038564672" />
+
 
 ## 🚀 极速启动
 
